@@ -1,0 +1,24 @@
+{
+  "name": "keystone-nodemailer",
+  "version": "0.1.0",
+  "description": "Nodemailer support for Keystone",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github/bgag/keystone-nodemailer"
+  },
+  "keywords": [
+    "keystone",
+    "nodemailer"
+  ],
+  "author": "Thomas Bergwinkl <bergi@axolotlfarm.org> (https://www.bergnet.org/people/bergi/card#me)",
+  "license": "MIT",
+  "dependencies": {
+    "keystone": "^0.3.9",
+    "lodash": "^3.10.1",
+    "nodemailer": "^1.4.0"
+  }
+}
