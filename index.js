@@ -1,5 +1,6 @@
 var
 	_ = require('lodash'),
+	htmlToText = require('html-to-text'),
 	keystone = require('keystone'),
 	nodemailer = require('nodemailer');
 
@@ -76,10 +77,17 @@ keystone.Email.prototype.send = function (options, callback) {
 					return buildAddress(to.email, to.name)
 				}).join(', '),
 				subject: message.subject,
-				text: message.text,
 				html: message.html,
 				attachments: attachments
 			};
+
+			if (options.sendPlainText) {
+				if (typeof options.sendPlainText === 'object') {
+					mail.text = htmlToText.fromString(message.html, options.sendPlainText);	
+				} else {
+					mail.text = htmlToText.fromString(message.html);
+				}
+			}
 
 			transport.sendMail(mail, function(error, info) {
 				if (error) {
