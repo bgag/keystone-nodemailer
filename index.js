@@ -18,7 +18,7 @@ function buildAddress (email, name) {
 
 keystone.Email.prototype.send = function (options, callback) {
 
-	nodemailerOptions = keystone.get('email nodemailer');
+	var nodemailerOptions = keystone.get('email nodemailer');
 
 	// create transport once
 	if (!transport) {
@@ -103,7 +103,7 @@ keystone.Email.prototype.send = function (options, callback) {
 					callback({
 						from: 'Email.send',
 						key: 'send error',
-						message: 'Nodemailer encountered an error and did not send the emails.',
+						message: 'Email not sent; Nodemailer error: ' | error.message,
 						info: info
 					});
 				} else {
