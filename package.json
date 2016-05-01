@@ -1,6 +1,6 @@
 {
   "name": "keystone-nodemailer",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Nodemailer support for Keystone",
   "main": "index.js",
   "scripts": {
