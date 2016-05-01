@@ -2,7 +2,9 @@ var
 	_ = require('lodash'),
 	htmlToText = require('html-to-text'),
 	keystone = require('keystone'),
-	nodemailer = require('nodemailer');
+	nodemailer = require('nodemailer'),
+	sgTransport = require('nodemailer-sendgrid-transport');
+
 
 var transport;
 
@@ -16,9 +18,16 @@ function buildAddress (email, name) {
 
 keystone.Email.prototype.send = function (options, callback) {
 
+	var nodemailerOptions = keystone.get('email nodemailer');
+
 	// create transport once
 	if (!transport) {
-		transport = nodemailer.createTransport(keystone.get('email nodemailer'));
+		if ((nodemailerOptions.service) && (nodemailerOptions.service == 'sendgrid')) {
+			transport = nodemailer.createTransport(sgTransport(nodemailerOptions));
+		}
+		else {
+			transport = nodemailer.createTransport(nodemailerOptions);		
+		}
 	}
 
 	var locals = options;
@@ -94,7 +103,7 @@ keystone.Email.prototype.send = function (options, callback) {
 					callback({
 						from: 'Email.send',
 						key: 'send error',
-						message: 'Nodemailer encountered an error and did not send the emails.',
+						message: 'Email not sent; Nodemailer error: ' | error.message,
 						info: info
 					});
 				} else {
