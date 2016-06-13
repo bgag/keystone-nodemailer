@@ -1,7 +1,6 @@
 var
 	_ = require('lodash'),
 	htmlToText = require('html-to-text'),
-	keystone = require('keystone'),
 	nodemailer = require('nodemailer');
 
 var transport;
@@ -14,7 +13,7 @@ function buildAddress (email, name) {
 	}
 }
 
-keystone.Email.prototype.send = function (options, callback) {
+function send (keystone, options, callback) {
 
 	// create transport once
 	if (!transport) {
@@ -25,23 +24,23 @@ keystone.Email.prototype.send = function (options, callback) {
 
 	var prepareOptions = [locals];
 
-	if (arguments.length === 3 ) {
+	if (arguments.length === 4 ) {
 		// we expect locals, options, callback
-		if (_.isObject(arguments[1])) {
-			prepareOptions.push(arguments[1]);
+		if (_.isObject(arguments[2])) {
+			prepareOptions.push(arguments[2]);
 		}
-		callback = arguments[2];
+		callback = arguments[3];
 
-	} else if (arguments.length === 2 && !_.isFunction(callback)) {
+	} else if (arguments.length === 3 && !_.isFunction(callback)) {
 		// no callback so we expect locals, options
-		if (_.isObject(arguments[1])) {
-			prepareOptions.push(arguments[1]);
+		if (_.isObject(arguments[2])) {
+			prepareOptions.push(arguments[2]);
 		}
 		callback = function(err, info) {// eslint-disable-line no-unused-vars
 			if (err) console.log(err);
 		};
 
-	} else if (arguments.length === 1) {
+	} else if (arguments.length === 2) {
 		// we expect options here and it is pushed already
 		callback = function(err, info){// eslint-disable-line no-unused-vars
 			if (err) console.log(err);
@@ -108,3 +107,11 @@ keystone.Email.prototype.send = function (options, callback) {
 	this.prepare.apply(this, prepareOptions);
 
 };
+
+function init (keystone) {
+  keystone.Email.prototype.send = function (options, callback) {
+    send.call(this, keystone, options, callback);
+  };
+}
+
+module.exports = init
