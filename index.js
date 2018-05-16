@@ -94,7 +94,7 @@ function send (keystone, options, callback) {
 						from: 'Email.send',
 						key: 'send error',
 						message: 'Nodemailer encountered an error and did not send the emails.',
-						info: info
+						info: error
 					});
 				} else {
 					callback(null, info);
